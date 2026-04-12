@@ -1,4 +1,4 @@
-package com.odk.pjt.mealflow.user;
+package com.odk.pjt.mealflow.account;
 
 /**
  * Supported OAuth/OIDC providers. The {@link #persistedId()} value is stored in {@link Account#getAuthProvider()}.

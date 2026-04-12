@@ -1,6 +1,6 @@
 package com.odk.pjt.mealflow.security;
 
-import com.odk.pjt.mealflow.user.AccountProvisioningService;
+import com.odk.pjt.mealflow.account.AccountProvisioningService;
 
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;

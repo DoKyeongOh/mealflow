@@ -1,4 +1,4 @@
-package com.odk.pjt.mealflow.user;
+package com.odk.pjt.mealflow.account;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
