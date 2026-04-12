@@ -1,5 +1,8 @@
 HELP.md
 target/
+
+# Local credentials (copy from src/main/resources/application-credentials.properties.example)
+src/main/resources/application-credentials.properties
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
