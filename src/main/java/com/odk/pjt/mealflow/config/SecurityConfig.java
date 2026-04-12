@@ -15,7 +15,7 @@ import java.util.Set;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    
+
     @Bean
     SecurityFilterChain securityFilterChain(
             HttpSecurity http,
