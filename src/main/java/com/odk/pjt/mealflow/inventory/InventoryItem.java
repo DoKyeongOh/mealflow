@@ -22,8 +22,7 @@ import lombok.Setter;
         indexes = {
             @Index(name = "idx_inventory_items_user_grocery", columnList = "user_id,grocery_type_id"),
             @Index(name = "idx_inventory_items_user_storage", columnList = "user_id,storage_location_id"),
-            @Index(name = "idx_inventory_items_user_expiration", columnList = "user_id,expiration_date"),
-            @Index(name = "idx_inventory_items_user_status", columnList = "user_id,status")
+            @Index(name = "idx_inventory_items_user_expiration", columnList = "user_id,expiration_date")
         })
 @Getter
 @Setter
@@ -52,13 +51,6 @@ public class InventoryItem {
 
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 32)
-    private InventoryItemStatus status;
-
-    @Column(name = "depleted_at")
-    private Instant depletedAt;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

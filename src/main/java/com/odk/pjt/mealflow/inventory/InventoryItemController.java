@@ -26,12 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class InventoryItemController {
 
     private final InventoryItemService inventoryItemService;
+    private final InventoryChangeEventService inventoryChangeEventService;
     private final GroceryTypeService groceryTypeService;
 
     @GetMapping
     public List<InventoryDtos.InventoryItemResponse> list() {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return inventoryItemService.listActive(userId).stream()
+        return inventoryItemService.list(userId).stream()
                 .map(InventoryDtos.InventoryItemResponse::from)
                 .toList();
     }
@@ -74,58 +75,29 @@ public class InventoryItemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public InventoryDtos.InventoryItemResponse stockIn(@Valid @RequestBody InventoryDtos.StockInRequest body) {
+    public InventoryDtos.InventoryItemResponse create(@Valid @RequestBody InventoryDtos.CreateInventoryItemRequest body) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return InventoryDtos.InventoryItemResponse.from(inventoryItemService.stockIn(
-                userId,
-                body.groceryTypeId(),
-                body.storageLocationId(),
-                body.quantity(),
-                body.unit(),
-                body.expirationDate()));
-    }
-
-    @PostMapping("/{id}/use")
-    public InventoryDtos.InventoryItemResponse use(
-            @PathVariable Long id, @Valid @RequestBody InventoryDtos.UseRequest body) {
-        Long userId = SecurityUtils.requireCurrentUserId();
-        return InventoryDtos.InventoryItemResponse.from(
-                inventoryItemService.use(userId, id, body.amount(), body.memo()));
-    }
-
-    @PostMapping("/{id}/dispose")
-    public InventoryDtos.InventoryItemResponse dispose(
-            @PathVariable Long id, @RequestBody(required = false) InventoryDtos.DisposeRequest body) {
-        Long userId = SecurityUtils.requireCurrentUserId();
-        String memo = body != null ? body.memo() : null;
-        return InventoryDtos.InventoryItemResponse.from(inventoryItemService.dispose(userId, id, memo));
+        return InventoryDtos.InventoryItemResponse.from(inventoryItemService.create(userId, body));
     }
 
     @PatchMapping("/{id}")
     public InventoryDtos.InventoryItemResponse patch(
             @PathVariable Long id, @Valid @RequestBody InventoryDtos.UpdateItemRequest body) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return InventoryDtos.InventoryItemResponse.from(inventoryItemService.updateDetails(
-                userId,
-                id,
-                body.quantity(),
-                body.unit(),
-                body.expirationDate(),
-                body.storageLocationId(),
-                body.groceryTypeId()));
+        return InventoryDtos.InventoryItemResponse.from(inventoryItemService.updateDetails(userId, id, body));
     }
 
     @DeleteMapping("/{id}")
-    public InventoryDtos.InventoryItemResponse remove(@PathVariable Long id) {
+    public InventoryDtos.InventoryItemResponse delete(@PathVariable Long id) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return InventoryDtos.InventoryItemResponse.from(inventoryItemService.completeOrRemove(userId, id));
+        return InventoryDtos.InventoryItemResponse.from(inventoryItemService.delete(userId, id));
     }
 
     @GetMapping("/{id}/events")
     public List<InventoryDtos.InventoryEventResponse> eventsForItem(
             @PathVariable Long id, @RequestParam(defaultValue = "50") int limit) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return inventoryItemService.listEventsForItem(userId, id, limit).stream()
+        return inventoryChangeEventService.listEventsForItem(userId, id, limit).stream()
                 .map(InventoryDtos.InventoryEventResponse::from)
                 .toList();
     }

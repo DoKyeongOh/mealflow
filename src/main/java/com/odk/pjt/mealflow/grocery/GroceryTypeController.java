@@ -36,6 +36,7 @@ public class GroceryTypeController {
         return GroceryTypeDtos.Response.from(entity);
     }
 
+    /** 보관 항목이 이 식료품 종류를 참조하는지 (삭제 전 확인 등). */
     @GetMapping("/{id}/referenced")
     public GroceryTypeDtos.ReferenceStatusResponse referenced(@PathVariable Long id) {
         Long userId = SecurityUtils.requireCurrentUserId();
@@ -46,16 +47,14 @@ public class GroceryTypeController {
     @ResponseStatus(HttpStatus.CREATED)
     public GroceryTypeDtos.Response create(@Valid @RequestBody GroceryTypeDtos.CreateRequest body) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        GroceryType entity =
-                groceryTypeService.create(userId, body.name(), body.defaultStorageLocationId(), body.defaultShelfLifeDays());
+        GroceryType entity = groceryTypeService.create(userId, body);
         return GroceryTypeDtos.Response.from(entity);
     }
 
     @PutMapping("/{id}")
     public GroceryTypeDtos.Response update(@PathVariable Long id, @Valid @RequestBody GroceryTypeDtos.UpdateRequest body) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        GroceryType entity = groceryTypeService.update(
-                userId, id, body.name(), body.defaultStorageLocationId(), body.defaultShelfLifeDays());
+        GroceryType entity = groceryTypeService.update(userId, id, body);
         return GroceryTypeDtos.Response.from(entity);
     }
 

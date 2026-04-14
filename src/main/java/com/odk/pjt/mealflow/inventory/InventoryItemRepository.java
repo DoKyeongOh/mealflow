@@ -12,29 +12,23 @@ public interface InventoryItemRepository extends JpaRepository<InventoryItem, Lo
 
     Optional<InventoryItem> findByIdAndUserId(Long id, Long userId);
 
-    List<InventoryItem> findByUserIdAndStatusOrderByExpirationDateAscIdAsc(Long userId, InventoryItemStatus status);
+    List<InventoryItem> findByUserIdOrderByExpirationDateAscIdAsc(Long userId);
 
-    List<InventoryItem> findByUserIdAndGroceryTypeIdAndStorageLocationIdAndStatus(
-            Long userId, Long groceryTypeId, Long storageLocationId, InventoryItemStatus status);
+    List<InventoryItem> findByUserIdAndGroceryTypeIdAndStorageLocationId(
+            Long userId, Long groceryTypeId, Long storageLocationId);
 
     @Query(
             """
             SELECT i FROM InventoryItem i
-            WHERE i.userId = :userId AND i.status = :status
+            WHERE i.userId = :userId
+            AND i.quantity > 0
             AND i.expirationDate IS NOT NULL AND i.expirationDate <= :untilDate
             ORDER BY i.expirationDate ASC, i.id ASC
             """)
-    List<InventoryItem> findExpiringSoon(
-            @Param("userId") Long userId,
-            @Param("status") InventoryItemStatus status,
-            @Param("untilDate") LocalDate untilDate);
+    List<InventoryItem> findExpiringSoon(@Param("userId") Long userId, @Param("untilDate") LocalDate untilDate);
 
-    boolean existsByUserIdAndStorageLocationIdAndStatus(Long userId, Long storageLocationId, InventoryItemStatus status);
-
-    /** Any inventory row (including depleted) referencing this storage blocks physical delete. */
+    /** Any inventory row referencing this storage blocks physical delete. */
     boolean existsByUserIdAndStorageLocationId(Long userId, Long storageLocationId);
-
-    long countByUserIdAndGroceryTypeIdAndStatus(Long userId, Long groceryTypeId, InventoryItemStatus status);
 
     /** Any inventory row referencing this grocery type blocks physical delete. */
     boolean existsByUserIdAndGroceryTypeId(Long userId, Long groceryTypeId);

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class InventoryChangeEventController {
 
-    private final InventoryItemService inventoryItemService;
+    private final InventoryChangeEventService inventoryChangeEventService;
 
     @GetMapping
     public List<InventoryDtos.InventoryEventResponse> list(
@@ -22,9 +22,9 @@ public class InventoryChangeEventController {
         Long userId = SecurityUtils.requireCurrentUserId();
         List<InventoryChangeEvent> events;
         if (groceryTypeId != null) {
-            events = inventoryItemService.listEventsForGroceryType(userId, groceryTypeId, limit);
+            events = inventoryChangeEventService.listEventsForGroceryType(userId, groceryTypeId, limit);
         } else {
-            events = inventoryItemService.listEventsForUser(userId, limit);
+            events = inventoryChangeEventService.listEventsForUser(userId, limit);
         }
         return events.stream().map(InventoryDtos.InventoryEventResponse::from).toList();
     }

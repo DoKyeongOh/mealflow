@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GroceryTypeRepository extends JpaRepository<GroceryType, Long> {
 
-    List<GroceryType> findByUserIdOrderByNameAsc(Long userId);
+    List<GroceryType> findByUserIdOrderByUpdatedAtAsc(Long userId);
 
     Optional<GroceryType> findByIdAndUserId(Long id, Long userId);
 

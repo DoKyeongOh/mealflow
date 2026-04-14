@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -41,10 +40,6 @@ public class InventoryChangeEvent {
 
     @Column(name = "grocery_type_id", nullable = false)
     private Long groceryTypeId;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "event_type", nullable = false, length = 32)
-    private InventoryEventType eventType;
 
     @Column(name = "count_before", precision = 19, scale = 4)
     private BigDecimal countBefore;

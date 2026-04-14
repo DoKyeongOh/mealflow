@@ -7,17 +7,39 @@ import java.time.Instant;
 
 public final class GroceryTypeDtos {
 
-    private GroceryTypeDtos() {}
+    private GroceryTypeDtos() {
+    }
 
     public record CreateRequest(
             @NotBlank @Size(max = 255) String name,
             Long defaultStorageLocationId,
-            Integer defaultShelfLifeDays) {}
+            Integer defaultShelfLifeDays) {
+
+        public GroceryType toGroceryType(Long userId, Instant now) {
+            GroceryType entity = new GroceryType();
+            entity.setUserId(userId);
+            entity.setName(name.trim());
+            entity.setDefaultStorageLocationId(defaultStorageLocationId);
+            entity.setDefaultShelfLifeDays(defaultShelfLifeDays);
+            entity.setCreatedAt(now);
+            entity.setUpdatedAt(now);
+            return entity;
+        }
+    }
 
     public record UpdateRequest(
             @NotBlank @Size(max = 255) String name,
             Long defaultStorageLocationId,
-            Integer defaultShelfLifeDays) {}
+            Integer defaultShelfLifeDays) {
+
+        public GroceryType toGroceryType(GroceryType entity) {
+            entity.setName(name.trim());
+            entity.setDefaultStorageLocationId(defaultStorageLocationId);
+            entity.setDefaultShelfLifeDays(defaultShelfLifeDays);
+            entity.setUpdatedAt(Instant.now());
+            return entity;
+        }
+    }
 
     public record Response(
             Long id,
@@ -38,6 +60,6 @@ public final class GroceryTypeDtos {
         }
     }
 
-    /** {@code true} if any inventory item uses this grocery type. */
+    /** {@code true} if any inventory item references this grocery type. */
     public record ReferenceStatusResponse(boolean referenced) {}
 }

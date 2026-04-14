@@ -25,9 +25,7 @@ public class StorageLocationService {
 
     @Transactional(readOnly = true)
     public StorageLocation get(Long userId, Long id) {
-        return storageLocationRepository
-                .findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return requireStorageLocation(userId, id);
     }
 
     /**
@@ -35,9 +33,7 @@ public class StorageLocationService {
      */
     @Transactional(readOnly = true)
     public boolean isReferenced(Long userId, Long storageLocationId) {
-        storageLocationRepository
-                .findByIdAndUserId(storageLocationId, userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        requireStorageLocation(userId, storageLocationId);
         if (inventoryItemRepository.existsByUserIdAndStorageLocationId(userId, storageLocationId)) {
             return true;
         }
@@ -61,9 +57,7 @@ public class StorageLocationService {
 
     @Transactional
     public StorageLocation update(Long userId, Long id, String name) {
-        StorageLocation entity = storageLocationRepository
-                .findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        StorageLocation entity = requireStorageLocation(userId, id);
         String trimmed = name.trim();
         if (storageLocationRepository.existsByUserIdAndNameIgnoreCaseAndIdNot(userId, trimmed, id)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate storage location name");
@@ -75,9 +69,6 @@ public class StorageLocationService {
 
     @Transactional
     public void delete(Long userId, Long id) {
-        StorageLocation entity = storageLocationRepository
-                .findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         if (inventoryItemRepository.existsByUserIdAndStorageLocationId(userId, id)) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT, "Cannot delete: inventory items reference this location");
@@ -86,6 +77,14 @@ public class StorageLocationService {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT, "Cannot delete: a grocery type uses this location as default");
         }
-        storageLocationRepository.delete(entity);
+        if (storageLocationRepository.findByIdAndUserId(id, userId).isPresent()) {
+            storageLocationRepository.deleteById(id);
+        }
+    }
+
+    private StorageLocation requireStorageLocation(Long userId, Long id) {
+        return storageLocationRepository
+                .findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }
