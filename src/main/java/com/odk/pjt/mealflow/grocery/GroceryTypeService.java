@@ -47,7 +47,9 @@ public class GroceryTypeService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate grocery type name");
         }
 
-        requireStorageLocation(userId, request.defaultStorageLocationId());
+        if (request.defaultStorageLocationId() != null) {
+            requireStorageLocation(userId, request.defaultStorageLocationId());
+        }
         Instant now = Instant.now();
         return groceryTypeRepository.save(request.toGroceryType(userId, now));
     }
@@ -60,7 +62,9 @@ public class GroceryTypeService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate grocery type name");
         }
 
-        requireStorageLocation(userId, request.defaultStorageLocationId());
+        if (request.defaultStorageLocationId() != null) {
+            requireStorageLocation(userId, request.defaultStorageLocationId());
+        }
         return groceryTypeRepository.save(request.toGroceryType(entity));
     }
 

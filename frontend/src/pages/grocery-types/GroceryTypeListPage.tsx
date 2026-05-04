@@ -24,7 +24,7 @@ export function GroceryTypeListPage() {
   })
 
   const locName = (id: number | null) => {
-    if (id == null) return '—'
+    if (id == null) return '--'
     return locations?.find((l) => l.id === id)?.name ?? `#${id}`
   }
 
@@ -39,7 +39,7 @@ export function GroceryTypeListPage() {
     {
       title: '평균 유통기한(일)',
       dataIndex: 'defaultShelfLifeDays',
-      render: (v: number | null) => (v != null ? v : '—'),
+      render: (v: number | null) => (v != null ? v : '--'),
     },
     {
       title: '작업',

@@ -13,7 +13,7 @@ const { Title } = Typography
 
 type FormValues = {
   name: string
-  defaultStorageLocationId: number
+  defaultStorageLocationId: number | null
   defaultShelfLifeDays: number | null
 }
 
@@ -127,14 +127,15 @@ export function GroceryTypeFormPage() {
           <Form.Item
             name="defaultStorageLocationId"
             label="기본 저장 장소"
-            rules={[{ required: true, message: '기본 저장 장소를 선택하세요.' }]}
+            rules={[{ required: false }]}
           >
             <Select
               showSearch
               optionFilterProp="label"
               options={locationOptions}
               loading={locLoading}
-              placeholder="저장 장소를 먼저 등록해야 합니다"
+              allowClear
+              placeholder="저장 장소를 선택하세요 (선택)"
             />
           </Form.Item>
           <Form.Item name="defaultShelfLifeDays" label="평균 유통기한 기본값(일)">

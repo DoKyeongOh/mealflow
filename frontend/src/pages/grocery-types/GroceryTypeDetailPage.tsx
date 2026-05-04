@@ -113,10 +113,10 @@ export function GroceryTypeDetailPage() {
           <Descriptions.Item label="기본 저장 장소">
             {data.defaultStorageLocationId != null
               ? `${defaultLoc?.name ?? ''} (#${data.defaultStorageLocationId})`
-              : '—'}
+              : '--'}
           </Descriptions.Item>
           <Descriptions.Item label="평균 유통기한(일)">
-            {data.defaultShelfLifeDays != null ? data.defaultShelfLifeDays : '—'}
+            {data.defaultShelfLifeDays != null ? data.defaultShelfLifeDays : '--'}
           </Descriptions.Item>
           <Descriptions.Item label="생성">{data.createdAt}</Descriptions.Item>
           <Descriptions.Item label="수정">{data.updatedAt}</Descriptions.Item>

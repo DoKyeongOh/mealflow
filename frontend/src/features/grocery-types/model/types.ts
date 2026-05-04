@@ -9,13 +9,13 @@ export interface GroceryTypeResponse {
 
 export interface GroceryTypeCreateRequest {
   name: string
-  defaultStorageLocationId: number
+  defaultStorageLocationId: number | null
   defaultShelfLifeDays: number | null
 }
 
 export interface GroceryTypeUpdateRequest {
   name: string
-  defaultStorageLocationId: number
+  defaultStorageLocationId: number | null
   defaultShelfLifeDays: number | null
 }
 

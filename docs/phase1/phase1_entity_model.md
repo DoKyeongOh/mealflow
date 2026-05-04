@@ -5,7 +5,7 @@
 | 항목 | 내용 |
 |------|------|
 | 문서명 | 페이즈 1 엔티티 모델 및 관계 정의 |
-| 버전 | 2.0 |
+| 버전 | 2.1 |
 | 기준 문서 | `docs/phase1/phase1_functional_specification.md`, ER 보완안(외부 리뷰) |
 | 목적 | 페이즈 1 구현 시 필요한 도메인 엔티티, 속성, 관계, 정책·인덱스를 한곳에 정리한다 |
 | 필드 표기 | **속성(컬럼)명**은 **camelCase** 영문. 엔티티·타입명은 **PascalCase**. DB 테이블명 예시는 기존처럼 `snake_case`를 쓸 수 있으며, DDL에서는 팀 규칙에 맞게 매핑한다 |
@@ -146,7 +146,7 @@
 | `id` | 예 | — | 기본 키 |
 | `userId` | 예 | M-04 | 소속 사용자; **개인 마스터** |
 | `name` | 예 | T-04 | 표시명 |
-| `defaultStorageLocationId` | 선택 | T-05, C-02 | **`StorageLocation.id`**. 신규 보관 항목 등록 시 기본값 제안; null이면 앱에서 안내 |
+| `defaultStorageLocationId` | 선택 | T-05, C-02 | **`StorageLocation.id`**. 신규 보관 항목 등록 시 기본값 제안; 미지정 가능(null) |
 | `defaultShelfLifeDays` | 선택 | T-06, C-01 | 일수 |
 | `createdAt` / `updatedAt` | 권장 | — | |
 | `archivedAt` | 선택 | T-03 | 비노출·아카이브 시각; 물리 삭제 대안 |
@@ -366,3 +366,4 @@ ER 보완안에서 권장한 대로, 아래는 **페이즈 1에서 기본 정책
 | 1.8 | 2026-04-11 | 이력 수량 필드명을 `qty_before` / `qty_change` / `qty_after` 로 단순화 |
 | 1.9 | 2026-04-11 | `StorageLocation`에서 `kind`·`label` 제거 — **행 자체가 보관 위치**, `name`만 유지 |
 | 2.0 | 2026-04-11 | 문서 내 **속성(필드) 이름**을 **camelCase 영문**으로 통일; 물리 DB·테이블명은 프로젝트에서 매핑 |
+| 2.1 | 2026-05-04 | `GroceryType`의 기본 저장소 필드 필수 여부를 선택(false)으로 명시 및 코드 동기화 |
