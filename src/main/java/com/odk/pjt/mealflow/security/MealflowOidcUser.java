@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 /**
- * Wraps the delegate {@link OidcUser} from Google and exposes the internal {@link com.odk.pjt.mealflow.user.User} id for
+ * Wraps the delegate {@link OidcUser} from Google and exposes the internal {@link com.odk.pjt.mealflow.user.model.User} id for
  * app authorization (M-04).
  */
 public final class MealflowOidcUser implements OidcUser {

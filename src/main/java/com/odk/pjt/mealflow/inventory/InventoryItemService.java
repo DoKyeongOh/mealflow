@@ -1,9 +1,12 @@
 package com.odk.pjt.mealflow.inventory;
 
-import com.odk.pjt.mealflow.grocery.GroceryType;
+import com.odk.pjt.mealflow.grocery.model.GroceryType;
 import com.odk.pjt.mealflow.grocery.GroceryTypeRepository;
-import com.odk.pjt.mealflow.inventory.dto.InventoryDtos;
-import com.odk.pjt.mealflow.storage.StorageLocation;
+import com.odk.pjt.mealflow.inventoryevent.InventoryChangeEventService;
+import com.odk.pjt.mealflow.inventory.dto.InventoryItemCreateRequest;
+import com.odk.pjt.mealflow.inventory.dto.InventoryItemUpdateRequest;
+import com.odk.pjt.mealflow.inventory.model.InventoryItem;
+import com.odk.pjt.mealflow.storage.model.StorageLocation;
 import com.odk.pjt.mealflow.storage.StorageLocationRepository;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -58,7 +61,7 @@ public class InventoryItemService {
      * 신규 보관 행 생성(입고). 수량 증가·감소는 {@link #updateDetails}로 처리.
      */
     @Transactional
-    public InventoryItem create(Long userId, InventoryDtos.CreateInventoryItemRequest request) {
+    public InventoryItem create(Long userId, InventoryItemCreateRequest request) {
         if (request.quantity().compareTo(BigDecimal.ZERO) <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "quantity must be positive");
         }
@@ -88,7 +91,7 @@ public class InventoryItemService {
     }
 
     @Transactional
-    public InventoryItem updateDetails(Long userId, Long id, InventoryDtos.UpdateItemRequest request) {
+    public InventoryItem updateDetails(Long userId, Long id, InventoryItemUpdateRequest request) {
         InventoryItem item = requireLineItem(userId, id);
         InventoryItem before = snapshotForEvent(item);
         if (request.quantity() != null && request.quantity().compareTo(BigDecimal.ZERO) < 0) {

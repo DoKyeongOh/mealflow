@@ -1,4 +1,4 @@
-package com.odk.pjt.mealflow.inventory;
+package com.odk.pjt.mealflow.inventory.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,7 +47,7 @@ public class InventoryItem {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 32)
-    private GroceryUnit unit;
+    private InventoryItemUnit unit;
 
     @Column(name = "expiration_date")
     private LocalDate expirationDate;

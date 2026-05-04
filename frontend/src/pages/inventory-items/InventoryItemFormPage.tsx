@@ -3,11 +3,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs, { type Dayjs } from 'dayjs'
 import { useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { listGroceryTypes } from '@/features/grocery-types/api/groceryTypeApi'
+import { getGroceryType, listGroceryTypes } from '@/features/grocery-types/api/groceryTypeApi'
 import {
   createInventoryItem,
   getInventoryItem,
-  getSuggestedDefaults,
   patchInventoryItem,
 } from '@/features/inventory-items/api/inventoryItemApi'
 import type { CreateInventoryItemRequest, GroceryUnit, UpdateInventoryItemRequest } from '@/features/inventory-items/model/types'
@@ -55,12 +54,14 @@ export function InventoryItemFormPage() {
   useEffect(() => {
     if (isEdit || !groceryTypeIdWatch || !Number.isFinite(groceryTypeIdWatch)) return
     let cancelled = false
-    getSuggestedDefaults(groceryTypeIdWatch)
-      .then((d) => {
+    getGroceryType(groceryTypeIdWatch)
+      .then((gt) => {
         if (cancelled) return
         form.setFieldsValue({
-          storageLocationId: d.suggestedStorageLocationId ?? undefined,
-          expirationDate: d.suggestedExpirationDate ? dayjs(d.suggestedExpirationDate) : undefined,
+          storageLocationId: gt.defaultStorageLocationId ?? undefined,
+          expirationDate: gt.defaultShelfLifeDays
+            ? dayjs().add(gt.defaultShelfLifeDays, 'day')
+            : undefined,
         })
       })
       .catch(() => {

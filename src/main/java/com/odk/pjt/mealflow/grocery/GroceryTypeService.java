@@ -1,8 +1,10 @@
 package com.odk.pjt.mealflow.grocery;
 
-import com.odk.pjt.mealflow.grocery.dto.GroceryTypeDtos;
+import com.odk.pjt.mealflow.grocery.dto.GroceryTypeCreateRequest;
+import com.odk.pjt.mealflow.grocery.dto.GroceryTypeUpdateRequest;
+import com.odk.pjt.mealflow.grocery.model.GroceryType;
 import com.odk.pjt.mealflow.inventory.InventoryItemRepository;
-import com.odk.pjt.mealflow.storage.StorageLocation;
+import com.odk.pjt.mealflow.storage.model.StorageLocation;
 import com.odk.pjt.mealflow.storage.StorageLocationRepository;
 import java.time.Instant;
 import java.util.List;
@@ -40,7 +42,7 @@ public class GroceryTypeService {
     }
 
     @Transactional
-    public GroceryType create(Long userId, GroceryTypeDtos.CreateRequest request) {
+    public GroceryType create(Long userId, GroceryTypeCreateRequest request) {
         if (groceryTypeRepository.existsByUserIdAndNameIgnoreCase(userId, request.name().trim())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate grocery type name");
         }
@@ -51,7 +53,7 @@ public class GroceryTypeService {
     }
 
     @Transactional
-    public GroceryType update(Long userId, Long id, GroceryTypeDtos.UpdateRequest request) {
+    public GroceryType update(Long userId, Long id, GroceryTypeUpdateRequest request) {
         GroceryType entity = requireGroceryType(userId, id);
 
         if (groceryTypeRepository.existsByUserIdAndNameIgnoreCaseAndIdNot(userId, request.name().trim(), id)) {

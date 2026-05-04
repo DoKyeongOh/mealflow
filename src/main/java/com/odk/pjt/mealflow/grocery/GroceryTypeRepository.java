@@ -2,6 +2,7 @@ package com.odk.pjt.mealflow.grocery;
 
 import java.util.List;
 import java.util.Optional;
+import com.odk.pjt.mealflow.grocery.model.GroceryType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GroceryTypeRepository extends JpaRepository<GroceryType, Long> {

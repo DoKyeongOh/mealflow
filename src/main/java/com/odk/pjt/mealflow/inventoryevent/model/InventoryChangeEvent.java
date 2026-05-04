@@ -1,5 +1,6 @@
-package com.odk.pjt.mealflow.inventory;
+package com.odk.pjt.mealflow.inventoryevent.model;
 
+import com.odk.pjt.mealflow.inventory.model.InventoryItemUnit;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -52,7 +53,7 @@ public class InventoryChangeEvent {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 32)
-    private GroceryUnit unit;
+    private InventoryItemUnit unit;
 
     @Column(name = "occurred_at", nullable = false)
     private Instant occurredAt;

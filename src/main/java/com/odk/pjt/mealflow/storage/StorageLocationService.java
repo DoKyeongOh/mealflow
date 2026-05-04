@@ -1,5 +1,6 @@
 package com.odk.pjt.mealflow.storage;
 
+import com.odk.pjt.mealflow.storage.model.StorageLocation;
 import com.odk.pjt.mealflow.grocery.GroceryTypeRepository;
 import com.odk.pjt.mealflow.inventory.InventoryItemRepository;
 import java.time.Instant;

@@ -58,7 +58,3 @@ export interface InventoryEventResponse {
   occurredAt: string
 }
 
-export interface SuggestedDefaultsResponse {
-  suggestedExpirationDate: string | null
-  suggestedStorageLocationId: number | null
-}

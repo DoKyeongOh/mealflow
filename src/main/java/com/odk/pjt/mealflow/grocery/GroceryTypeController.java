@@ -1,6 +1,10 @@
 package com.odk.pjt.mealflow.grocery;
 
-import com.odk.pjt.mealflow.grocery.dto.GroceryTypeDtos;
+import com.odk.pjt.mealflow.grocery.dto.GroceryTypeCreateRequest;
+import com.odk.pjt.mealflow.grocery.dto.GroceryTypeReferenceStatusResponse;
+import com.odk.pjt.mealflow.grocery.dto.GroceryTypeResponse;
+import com.odk.pjt.mealflow.grocery.dto.GroceryTypeUpdateRequest;
+import com.odk.pjt.mealflow.grocery.model.GroceryType;
 import com.odk.pjt.mealflow.security.SecurityUtils;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -24,38 +28,38 @@ public class GroceryTypeController {
     private final GroceryTypeService groceryTypeService;
 
     @GetMapping
-    public List<GroceryTypeDtos.Response> list() {
+    public List<GroceryTypeResponse> list() {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return groceryTypeService.list(userId).stream().map(GroceryTypeDtos.Response::from).toList();
+        return groceryTypeService.list(userId).stream().map(GroceryTypeResponse::from).toList();
     }
 
     @GetMapping("/{id}")
-    public GroceryTypeDtos.Response get(@PathVariable Long id) {
+    public GroceryTypeResponse get(@PathVariable Long id) {
         Long userId = SecurityUtils.requireCurrentUserId();
         GroceryType entity = groceryTypeService.get(userId, id);
-        return GroceryTypeDtos.Response.from(entity);
+        return GroceryTypeResponse.from(entity);
     }
 
     /** 보관 항목이 이 식료품 종류를 참조하는지 (삭제 전 확인 등). */
     @GetMapping("/{id}/referenced")
-    public GroceryTypeDtos.ReferenceStatusResponse referenced(@PathVariable Long id) {
+    public GroceryTypeReferenceStatusResponse referenced(@PathVariable Long id) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return new GroceryTypeDtos.ReferenceStatusResponse(groceryTypeService.isReferenced(userId, id));
+        return new GroceryTypeReferenceStatusResponse(groceryTypeService.isReferenced(userId, id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public GroceryTypeDtos.Response create(@Valid @RequestBody GroceryTypeDtos.CreateRequest body) {
+    public GroceryTypeResponse create(@Valid @RequestBody GroceryTypeCreateRequest body) {
         Long userId = SecurityUtils.requireCurrentUserId();
         GroceryType entity = groceryTypeService.create(userId, body);
-        return GroceryTypeDtos.Response.from(entity);
+        return GroceryTypeResponse.from(entity);
     }
 
     @PutMapping("/{id}")
-    public GroceryTypeDtos.Response update(@PathVariable Long id, @Valid @RequestBody GroceryTypeDtos.UpdateRequest body) {
+    public GroceryTypeResponse update(@PathVariable Long id, @Valid @RequestBody GroceryTypeUpdateRequest body) {
         Long userId = SecurityUtils.requireCurrentUserId();
         GroceryType entity = groceryTypeService.update(userId, id, body);
-        return GroceryTypeDtos.Response.from(entity);
+        return GroceryTypeResponse.from(entity);
     }
 
     @DeleteMapping("/{id}")

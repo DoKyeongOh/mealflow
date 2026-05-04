@@ -8,7 +8,7 @@ public final class SecurityUtils {
     private SecurityUtils() {}
 
     /**
-     * Returns the persisted {@link com.odk.pjt.mealflow.user.User#getId()} for the current OAuth2 session principal.
+     * Returns the persisted {@link com.odk.pjt.mealflow.user.model.User#getId()} for the current OAuth2 session principal.
      */
     public static Long requireCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -1,7 +1,12 @@
 package com.odk.pjt.mealflow.storage;
 
 import com.odk.pjt.mealflow.security.SecurityUtils;
-import com.odk.pjt.mealflow.storage.dto.StorageLocationDtos;
+
+import com.odk.pjt.mealflow.storage.dto.StorageLocationCreateRequest;
+import com.odk.pjt.mealflow.storage.dto.StorageLocationReferenceStatusResponse;
+import com.odk.pjt.mealflow.storage.dto.StorageLocationResponse;
+import com.odk.pjt.mealflow.storage.dto.StorageLocationUpdateRequest;
+import com.odk.pjt.mealflow.storage.model.StorageLocation;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,39 +29,39 @@ public class StorageLocationController {
     private final StorageLocationService storageLocationService;
 
     @GetMapping
-    public List<StorageLocationDtos.Response> list() {
+    public List<StorageLocationResponse> list() {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return storageLocationService.list(userId).stream().map(StorageLocationDtos.Response::from).toList();
+        return storageLocationService.list(userId).stream().map(StorageLocationResponse::from).toList();
     }
 
     @GetMapping("/{id}")
-    public StorageLocationDtos.Response get(@PathVariable Long id) {
+    public StorageLocationResponse get(@PathVariable Long id) {
         Long userId = SecurityUtils.requireCurrentUserId();
         StorageLocation entity = storageLocationService.get(userId, id);
-        return StorageLocationDtos.Response.from(entity);
+        return StorageLocationResponse.from(entity);
     }
 
     /** 저장소가 보관 항목·식료품 기본 저장소로 참조되는지 (삭제 전 확인 등). */
     @GetMapping("/{id}/referenced")
-    public StorageLocationDtos.ReferenceStatusResponse referenced(@PathVariable Long id) {
+    public StorageLocationReferenceStatusResponse referenced(@PathVariable Long id) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return new StorageLocationDtos.ReferenceStatusResponse(storageLocationService.isReferenced(userId, id));
+        return new StorageLocationReferenceStatusResponse(storageLocationService.isReferenced(userId, id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public StorageLocationDtos.Response create(@Valid @RequestBody StorageLocationDtos.CreateRequest body) {
+    public StorageLocationResponse create(@Valid @RequestBody StorageLocationCreateRequest body) {
         Long userId = SecurityUtils.requireCurrentUserId();
         StorageLocation entity = storageLocationService.create(userId, body.name());
-        return StorageLocationDtos.Response.from(entity);
+        return StorageLocationResponse.from(entity);
     }
 
     @PutMapping("/{id}")
-    public StorageLocationDtos.Response update(
-            @PathVariable Long id, @Valid @RequestBody StorageLocationDtos.UpdateRequest body) {
+    public StorageLocationResponse update(
+            @PathVariable Long id, @Valid @RequestBody StorageLocationUpdateRequest body) {
         Long userId = SecurityUtils.requireCurrentUserId();
         StorageLocation entity = storageLocationService.update(userId, id, body.name());
-        return StorageLocationDtos.Response.from(entity);
+        return StorageLocationResponse.from(entity);
     }
 
     @DeleteMapping("/{id}")

@@ -2,8 +2,9 @@ package com.odk.pjt.mealflow.account;
 
 import java.time.Instant;
 import java.util.Optional;
+import com.odk.pjt.mealflow.account.model.Account;
 
-import com.odk.pjt.mealflow.user.User;
+import com.odk.pjt.mealflow.user.model.User;
 import com.odk.pjt.mealflow.user.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;

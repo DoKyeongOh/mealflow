@@ -2,6 +2,7 @@ package com.odk.pjt.mealflow.storage;
 
 import java.util.List;
 import java.util.Optional;
+import com.odk.pjt.mealflow.storage.model.StorageLocation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StorageLocationRepository extends JpaRepository<StorageLocation, Long> {

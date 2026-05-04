@@ -1,6 +1,9 @@
-package com.odk.pjt.mealflow.inventory;
+package com.odk.pjt.mealflow.inventoryevent;
 
 import com.odk.pjt.mealflow.grocery.GroceryTypeRepository;
+import com.odk.pjt.mealflow.inventoryevent.model.InventoryChangeEvent;
+import com.odk.pjt.mealflow.inventory.model.InventoryItem;
+import com.odk.pjt.mealflow.inventory.InventoryItemRepository;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;

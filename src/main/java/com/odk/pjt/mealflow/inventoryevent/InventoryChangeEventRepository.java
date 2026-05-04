@@ -1,7 +1,8 @@
-package com.odk.pjt.mealflow.inventory;
+package com.odk.pjt.mealflow.inventoryevent;
 
 import java.util.List;
 import org.springframework.data.domain.Pageable;
+import com.odk.pjt.mealflow.inventoryevent.model.InventoryChangeEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InventoryChangeEventRepository extends JpaRepository<InventoryChangeEvent, Long> {

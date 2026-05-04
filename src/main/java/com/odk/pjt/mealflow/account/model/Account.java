@@ -1,6 +1,6 @@
-package com.odk.pjt.mealflow.account;
+package com.odk.pjt.mealflow.account.model;
 
-import com.odk.pjt.mealflow.user.User;
+import com.odk.pjt.mealflow.user.model.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

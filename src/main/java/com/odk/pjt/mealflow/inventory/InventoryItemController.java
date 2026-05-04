@@ -1,8 +1,11 @@
 package com.odk.pjt.mealflow.inventory;
 
-import com.odk.pjt.mealflow.grocery.GroceryType;
+import com.odk.pjt.mealflow.grocery.model.GroceryType;
 import com.odk.pjt.mealflow.grocery.GroceryTypeService;
-import com.odk.pjt.mealflow.inventory.dto.InventoryDtos;
+import com.odk.pjt.mealflow.inventory.dto.InventoryItemCreateRequest;
+import com.odk.pjt.mealflow.inventory.dto.InventoryItemResponse;
+import com.odk.pjt.mealflow.inventory.dto.InventoryItemUpdateRequest;
+
 import com.odk.pjt.mealflow.security.SecurityUtils;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
@@ -26,79 +29,57 @@ import org.springframework.web.bind.annotation.RestController;
 public class InventoryItemController {
 
     private final InventoryItemService inventoryItemService;
-    private final InventoryChangeEventService inventoryChangeEventService;
-    private final GroceryTypeService groceryTypeService;
 
     @GetMapping
-    public List<InventoryDtos.InventoryItemResponse> list() {
+    public List<InventoryItemResponse> list() {
         Long userId = SecurityUtils.requireCurrentUserId();
         return inventoryItemService.list(userId).stream()
-                .map(InventoryDtos.InventoryItemResponse::from)
+                .map(InventoryItemResponse::from)
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public InventoryDtos.InventoryItemResponse get(@PathVariable Long id) {
+    public InventoryItemResponse get(@PathVariable Long id) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return InventoryDtos.InventoryItemResponse.from(inventoryItemService.get(userId, id));
+        return InventoryItemResponse.from(inventoryItemService.get(userId, id));
     }
 
     /** C-03: items expiring on or before today + withinDays. */
     @GetMapping("/expiring")
-    public List<InventoryDtos.InventoryItemResponse> expiring(@RequestParam(defaultValue = "7") int withinDays) {
+    public List<InventoryItemResponse> expiring(@RequestParam(defaultValue = "7") int withinDays) {
         Long userId = SecurityUtils.requireCurrentUserId();
         return inventoryItemService.listExpiringWithin(userId, withinDays).stream()
-                .map(InventoryDtos.InventoryItemResponse::from)
+                .map(InventoryItemResponse::from)
                 .toList();
     }
 
     /** C-04: recently created items for reuse. */
     @GetMapping("/recent")
-    public List<InventoryDtos.InventoryItemResponse> recent(@RequestParam(defaultValue = "10") int limit) {
+    public List<InventoryItemResponse> recent(@RequestParam(defaultValue = "10") int limit) {
         Long userId = SecurityUtils.requireCurrentUserId();
         return inventoryItemService.listRecent(userId, limit).stream()
-                .map(InventoryDtos.InventoryItemResponse::from)
+                .map(InventoryItemResponse::from)
                 .toList();
     }
 
-    /** C-01/C-02: suggested expiration and storage from grocery type defaults. */
-    @GetMapping("/suggested-defaults")
-    public InventoryDtos.SuggestedDefaultsResponse suggestedDefaults(@RequestParam Long groceryTypeId) {
-        Long userId = SecurityUtils.requireCurrentUserId();
-        GroceryType gt = groceryTypeService.get(userId, groceryTypeId);
-        LocalDate suggestedExpiration = null;
-        if (gt.getDefaultShelfLifeDays() != null) {
-            suggestedExpiration = LocalDate.now().plusDays(gt.getDefaultShelfLifeDays());
-        }
-        return new InventoryDtos.SuggestedDefaultsResponse(suggestedExpiration, gt.getDefaultStorageLocationId());
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public InventoryDtos.InventoryItemResponse create(@Valid @RequestBody InventoryDtos.CreateInventoryItemRequest body) {
+    public InventoryItemResponse create(@Valid @RequestBody InventoryItemCreateRequest body) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return InventoryDtos.InventoryItemResponse.from(inventoryItemService.create(userId, body));
+        return InventoryItemResponse.from(inventoryItemService.create(userId, body));
     }
 
     @PatchMapping("/{id}")
-    public InventoryDtos.InventoryItemResponse patch(
-            @PathVariable Long id, @Valid @RequestBody InventoryDtos.UpdateItemRequest body) {
+    public InventoryItemResponse patch(
+            @PathVariable Long id, @Valid @RequestBody InventoryItemUpdateRequest body) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return InventoryDtos.InventoryItemResponse.from(inventoryItemService.updateDetails(userId, id, body));
+        return InventoryItemResponse.from(inventoryItemService.updateDetails(userId, id, body));
     }
 
     @DeleteMapping("/{id}")
-    public InventoryDtos.InventoryItemResponse delete(@PathVariable Long id) {
+    public InventoryItemResponse delete(@PathVariable Long id) {
         Long userId = SecurityUtils.requireCurrentUserId();
-        return InventoryDtos.InventoryItemResponse.from(inventoryItemService.delete(userId, id));
-    }
-
-    @GetMapping("/{id}/events")
-    public List<InventoryDtos.InventoryEventResponse> eventsForItem(
-            @PathVariable Long id, @RequestParam(defaultValue = "50") int limit) {
-        Long userId = SecurityUtils.requireCurrentUserId();
-        return inventoryChangeEventService.listEventsForItem(userId, id, limit).stream()
-                .map(InventoryDtos.InventoryEventResponse::from)
-                .toList();
+        return InventoryItemResponse.from(inventoryItemService.delete(userId, id));
     }
 }

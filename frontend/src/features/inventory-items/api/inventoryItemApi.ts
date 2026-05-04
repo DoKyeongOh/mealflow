@@ -2,7 +2,7 @@ import type {
   CreateInventoryItemRequest,
   InventoryEventResponse,
   InventoryItemResponse,
-  SuggestedDefaultsResponse,
+
   UpdateInventoryItemRequest,
 } from '@/features/inventory-items/model/types'
 import {
@@ -32,11 +32,6 @@ export function listRecent(limit = 10): Promise<InventoryItemResponse[]> {
   return apiGet<InventoryItemResponse[]>(`${BASE}/recent?limit=${limit}`)
 }
 
-export function getSuggestedDefaults(groceryTypeId: number): Promise<SuggestedDefaultsResponse> {
-  return apiGet<SuggestedDefaultsResponse>(
-    `${BASE}/suggested-defaults?groceryTypeId=${groceryTypeId}`,
-  )
-}
 
 export function createInventoryItem(
   body: CreateInventoryItemRequest,

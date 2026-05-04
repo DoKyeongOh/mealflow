@@ -1,4 +1,4 @@
-package com.odk.pjt.mealflow.user;
+package com.odk.pjt.mealflow.user.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
